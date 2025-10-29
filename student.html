@@ -20,8 +20,8 @@ select, input, button { width:100%; margin:5px 0; padding:8px; }
 
 <div id="quizArea" style="display:none;">
   <h2 id="quizWord"></h2>
-  <input id="answer" placeholder="英単語を入力してEnterキー" onkeydown="if(event.key==='Enter') checkAnswer()">
-  <button onclick="checkAnswer()">答える</button>
+  <input type="text" id="answer" placeholder="意味を入力" onkeydown="if(event.key === 'Enter') checkAnswer();">
+<button onclick="checkAnswer()">答える</button>
   <p id="result"></p>
   <div id="wrongArea" class="wrong-list" style="display:none;"></div>
 </div>
