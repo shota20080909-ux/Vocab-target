@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>教師モード - 単語テスト管理</title>
+<style>
+body { font-family:sans-serif; margin:30px; background:#f7f7f7; }
+.container { background:#fff; padding:20px; border-radius:10px; max-width:600px; margin:auto; }
+input, textarea, button { width:100%; margin:5px 0; padding:8px; }
+button { cursor:pointer; }
+.unit { background:#e3f2fd; padding:10px; border-radius:6px; margin-top:10px; }
+a { color:#1565c0; text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+<h1>📘 教師モード</h1>
+<input id="unitName" placeholder="単元名（例：Lesson 1）">
+<textarea id="wordInput" placeholder="1行に「apple=りんご」の形式で入力"></textarea>
+<button onclick="saveUnit()">💾 単元を保存</button>
+
+<h3>登録済みの単元</h3>
+<div id="unitList"></div>
+
+<hr>
+<h3>生徒用リンク</h3>
+<a href="student.html" target="_blank">▶ 生徒モードを開く</a>
+</div>
+
+<script>
+let units={};
+
+function loadUnits(){
+  const data = localStorage.getItem("vocabUnits");
+  if(data) units = JSON.parse(data);
+}
+
+function saveUnit(){
+  const name = document.getElementById("unitName").value.trim();
+  const text = document.getElementById("wordInput").value.trim();
+  if(!name || !text) return alert("単元名と単語を入力してください。");
+  const lines = text.split("\n").map(line=>{
+    const [en,jp] = line.split("=").map(v=>v.trim());
+    return {en,jp};
+  });
+  units[name] = lines;
+  localStorage.setItem("vocabUnits",JSON.stringify(units));
+  alert(`「${name}」を保存しました！`);
+  document.getElementById("unitName").value="";
+  document.getElementById("wordInput").value="";
+  showUnits();
+}
+
+function deleteUnit(name){
+  if(confirm(`「${name}」を削除しますか？`)){
+    delete units[name];
+    localStorage.setItem("vocabUnits",JSON.stringify(units));
+    showUnits();
+  }
+}
+
+function showUnits(){
+  const div=document.getElementById("unitList");
+  if(Object.keys(units).length===0){
+    div.innerHTML="登録された単元はありません。";
+    return;
+  }
+  div.innerHTML=Object.keys(units)
+    .map(name=>`
+      <div class="unit">
+      <b>${name}</b>（${units[name].length}語）
+      <button onclick="deleteUnit('${name}')">削除</button><br>
+      ${units[name].map(w=>`${w.en} = ${w.jp}`).join("<br>")}
+      </div>
+    `).join("");
+}
+
+loadUnits();
+showUnits();
+</script>
+</body>
+</html>
