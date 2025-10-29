@@ -18,12 +18,12 @@ select, input, button { width:100%; margin:5px 0; padding:8px; }
 <select id="unitSelect"></select>
 <button onclick="startQuiz()">テスト開始</button>
 
-<div id="quizArea" style="display:none;">
-  <h2 id="quizWord"></h2>
+<div id="testArea" class="hidden">
+  <h3 id="quizWord"></h3>
   <input type="text" id="answer" placeholder="意味を入力" onkeydown="if(event.key === 'Enter') checkAnswer();">
-<button onclick="checkAnswer()">答える</button>
+  <button onclick="checkAnswer()">答える</button>
+  <button onclick="endQuiz()">終了</button>
   <p id="result"></p>
-  <div id="wrongArea" class="wrong-list" style="display:none;"></div>
 </div>
 </div>
 
